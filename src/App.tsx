@@ -14,6 +14,7 @@ import CurrentSkeletons from "@/components/skeletons/CurrentSkeletons.tsx";
 import DailySkeleton from "@/components/skeletons/DailySkeleton.tsx";
 import HourlySkeleton from "@/components/skeletons/HourlySkeleton.tsx";
 import AdditionalSkeleton from "@/components/skeletons/AdditionalSkeleton.tsx";
+import SidePanel from "@/components/cards/SidePanel.tsx";
 
 export default function App() {
     const [coordinates, setCoordinates] = useState<Coords>({lat: 40, lon: 50});
@@ -36,43 +37,46 @@ export default function App() {
             : {lat: geoCodeData?.[0].lat ?? 0, lon: geoCodeData?.[0].lon ?? 0};
 
     return (
-        <div className="flex flex-col gap-8">
-            <div className="flex gap-8">
-                <div className="flex gap-4 items-center">
-                    <p className="text-2xl font-semibold">Location</p>
-                    <LocationDropdown
-                        location={location}
-                        setLocation={setLocation}
-                    />
+        <>
+            <div className="flex flex-col gap-8">
+                <div className="flex gap-8">
+                    <div className="flex gap-4 items-center">
+                        <p className="text-2xl font-semibold">Location</p>
+                        <LocationDropdown
+                            location={location}
+                            setLocation={setLocation}
+                        />
+                    </div>
+                    <div className="flex gap-4 items-center">
+                        <p className="text-2xl font-semibold">Map Type</p>
+                        <MapTypeDropdown
+                            mapType={mapType}
+                            setMapType={setMapType}
+                        />
+                    </div>
                 </div>
-                <div className="flex gap-4 items-center">
-                    <p className="text-2xl font-semibold">Map Type</p>
-                    <MapTypeDropdown
+                <div className=" ">
+                    <Map
+                        coords={coords}
+                        onMapClick={onMapClick}
                         mapType={mapType}
-                        setMapType={setMapType}
                     />
+                    <MapLegend mapType={mapType} />
                 </div>
+                <Suspense fallback={<CurrentSkeletons />}>
+                    <CurrentWeather coords={coords} />
+                </Suspense>
+                <Suspense fallback={<DailySkeleton />}>
+                    <DailyForcast coords={coords} />
+                </Suspense>
+                <Suspense fallback={<HourlySkeleton />}>
+                    <HourlyForcast coords={coords} />
+                </Suspense>
+                <Suspense fallback={<AdditionalSkeleton />}>
+                    <AdditionalInfo coords={coords} />
+                </Suspense>
             </div>
-            <div className=" ">
-                <Map
-                    coords={coords}
-                    onMapClick={onMapClick}
-                    mapType={mapType}
-                />
-                <MapLegend mapType={mapType} />
-            </div>
-            <Suspense fallback={<CurrentSkeletons />}>
-                <CurrentWeather coords={coords} />
-            </Suspense>
-            <Suspense fallback={<DailySkeleton />}>
-                <DailyForcast coords={coords} />
-            </Suspense>
-            <Suspense fallback={<HourlySkeleton />}>
-                <HourlyForcast coords={coords} />
-            </Suspense>
-            <Suspense fallback={<AdditionalSkeleton />}>
-                <AdditionalInfo coords={coords} />
-            </Suspense>
-        </div>
+            <SidePanel coords={coords} />
+        </>
     );
 }
