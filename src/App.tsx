@@ -1,5 +1,5 @@
-import DailyForcast from "./components/cards/DailyForcast";
-import HourlyForcast from "./components/cards/HourlyForcast";
+import DailyForecast from "./components/cards/DailyForcast";
+import HourlyForecast from "./components/cards/HourlyForcast";
 import CurrentWeather from "./components/cards/CurrentWeather";
 import AdditionalInfo from "./components/cards/AdditionalInfo";
 import Map from "./components/Map";
@@ -15,11 +15,13 @@ import DailySkeleton from "@/components/skeletons/DailySkeleton.tsx";
 import HourlySkeleton from "@/components/skeletons/HourlySkeleton.tsx";
 import AdditionalSkeleton from "@/components/skeletons/AdditionalSkeleton.tsx";
 import SidePanel from "@/components/cards/SidePanel.tsx";
+import Hamburger from '/src/assets/hamburger-svgrepo-com.svg?react';
 
 export default function App() {
     const [coordinates, setCoordinates] = useState<Coords>({lat: 40, lon: 50});
     const [location, setLocation] = useState<string>("Tokyo");
     const [mapType, setMapType] = useState<string>("temp_new");
+    const [sidePanelOpen, setSidePanelOpen] = useState<boolean>(true);
 
     const {data: geoCodeData} = useSuspenseQuery({
         queryKey: ["geocode", location],
@@ -54,6 +56,13 @@ export default function App() {
                             setMapType={setMapType}
                         />
                     </div>
+
+                    {!sidePanelOpen && (
+                        <button onClick={() => setSidePanelOpen(true)}>
+                            <Hamburger className="size-8 invert ml-auto" />
+                        </button>
+                    )}
+
                 </div>
                 <div className=" ">
                     <Map
@@ -67,16 +76,20 @@ export default function App() {
                     <CurrentWeather coords={coords} />
                 </Suspense>
                 <Suspense fallback={<DailySkeleton />}>
-                    <DailyForcast coords={coords} />
+                    <DailyForecast coords={coords} />
                 </Suspense>
                 <Suspense fallback={<HourlySkeleton />}>
-                    <HourlyForcast coords={coords} />
+                    <HourlyForecast coords={coords} />
                 </Suspense>
                 <Suspense fallback={<AdditionalSkeleton />}>
                     <AdditionalInfo coords={coords} />
                 </Suspense>
             </div>
-            <SidePanel coords={coords} />
+            <SidePanel
+                coords={coords}
+                isSidePanelOpen={sidePanelOpen}
+                setSidePanelOpen={setSidePanelOpen}
+            />
         </>
     );
 }

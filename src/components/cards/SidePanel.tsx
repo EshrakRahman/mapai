@@ -1,4 +1,4 @@
-import {Suspense} from "react";
+import {type Dispatch, type SetStateAction, Suspense} from "react";
 import {useSuspenseQuery} from "@tanstack/react-query";
 import {getAirPollution} from "@/api.ts";
 import type {Coords} from "leaflet";
@@ -6,18 +6,27 @@ import Card from "@/components/cards/Card.tsx";
 import {Slider} from "@/components/ui/slider.tsx";
 import clsx from "clsx";
 import InformationIcon from '/src/assets/information-3-svgrepo-com.svg?react';
+import Chevron from '/src/assets/chevronleft-svgrepo-com.svg?react';
+
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip.tsx";
+import SidePanelSkeleton from "@/components/skeletons/SidePanelSkeleton.tsx";
 
 type Props = {
 
     coords: Coords;
+    isSidePanelOpen: boolean;
+    setSidePanelOpen: Dispatch<SetStateAction<boolean>>
 }
-export default function SidePanel({coords}: Props) {
+export default function SidePanel(props: Props) {
+    const {isSidePanelOpen, setSidePanelOpen} = props;
 
     return (
-        <div className="fixed top-0 right-0 h-screen w-90 shadow-md  bg-sidebar z-1001 py-8 px-4 overflow-y-auto ">
-            <Suspense>
-                <AirPollution coords={coords} />
+        <div className={clsx('fixed top-0 right-0 h-screen w-90 shadow-md  bg-sidebar z-1001 py-8 px-4 overflow-y-auto transition-transform duration-300', isSidePanelOpen ? 'translate-x-0 ' : 'translate-x-full')}>
+            <button onClick={() => setSidePanelOpen(false)}>
+                <Chevron className="size-8 invert " />
+            </button>
+            <Suspense fallback={<SidePanelSkeleton />}>
+                <AirPollution {...props} />
             </Suspense>
         </div>
     );
@@ -48,8 +57,7 @@ function AirPollution({coords}: Props) {
                     </TooltipTrigger>
                     <TooltipContent className="z-2000">
                         <p className="max-w-xs">Air Quality Index. Possible values: 1, 2, 3, 4, 5. Where 1 = Good, 2 =
-                                                Fair, 3 = Moderate, 4
-                                                = Poor, 5 = Very Poor.</p>
+                                                Fair, 3 = Moderate, 4 = Poor, 5 = Very Poor.</p>
                     </TooltipContent>
                 </Tooltip>
             </div>
@@ -92,7 +100,20 @@ function AirPollution({coords}: Props) {
                         className="hover:scale-105 transition-transform duration-300 from-sidebar-accent to-sidebar-accent/60"
                     >
                         <div className="flex justify-between">
-                            <span className="text-lg font-bold capitalize ">{key}</span>
+                            <div className="flex items-center gap-2 ">
+                                <span className="text-lg font-bold capitalize ">{key}</span>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <InformationIcon className='size-4' />
+                                    </TooltipTrigger>
+                                    <TooltipContent className="z-2000">
+                                        <p className="max-w-xs">
+                                            Concentration of {}
+                                            {pollutantNameMapping[key.toUpperCase() as Pollutant]}
+                                        </p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </div>
                             <span className="text-lg font-bold ">{components}</span>
                         </div>
                         <Slider
