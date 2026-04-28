@@ -16,6 +16,7 @@ import HourlySkeleton from "@/components/skeletons/HourlySkeleton.tsx";
 import AdditionalSkeleton from "@/components/skeletons/AdditionalSkeleton.tsx";
 import SidePanel from "@/components/cards/SidePanel.tsx";
 import Hamburger from '/src/assets/hamburger-svgrepo-com.svg?react';
+import MobileHeader from "@/components/MobileHeader.tsx";
 
 export default function App() {
     const [coordinates, setCoordinates] = useState<Coords>({lat: 40, lon: 50});
@@ -40,16 +41,17 @@ export default function App() {
 
     return (
         <>
-            <div className="flex flex-col gap-8 p-8 w-full lg:w-[calc(100dvw - var(--sidepannel-width)] 2xl:h-screen ">
-                <div className="flex gap-8">
-                    <div className="flex gap-4 items-center">
+            <MobileHeader setSidePanelOpen={setSidePanelOpen} />
+            <div className="flex flex-col gap-8 p-8 w-full lg:w-[calc(100dvw - var(--sidepannel-width)] 2xl:h-screen 2xl:min-h-280 ">
+                <div className="flex flex-col gap-4 xs:flex-row xs:gap-8">
+                    <div className="flex flex-col md:flex-row md:gap-4">
                         <p className="text-2xl font-semibold">Location</p>
                         <LocationDropdown
                             location={location}
                             setLocation={setLocation}
                         />
                     </div>
-                    <div className="flex gap-4 items-center">
+                    <div className="flex flex-col md:flex-row md:gap-4">
                         <p className="text-2xl font-semibold">Map Type</p>
                         <MapTypeDropdown
                             mapType={mapType}
@@ -57,11 +59,13 @@ export default function App() {
                         />
                     </div>
 
-                    {!sidePanelOpen && (
-                        <button onClick={() => setSidePanelOpen(true)}>
-                            <Hamburger className="size-8 invert ml-auto lg:hidden" />
-                        </button>
-                    )}
+                    <button
+                        onClick={() => setSidePanelOpen(true)}
+                        className=" hidden xs:block "
+                    >
+                        <Hamburger className="size-6 invert ml-auto lg:hidden" />
+                    </button>
+
 
                 </div>
                 <div className="grid grid-cols-1 2xl:flex-1 2xl:min-h-0 gap-8 md:grid-cols-2 2xl:grid-cols-4 2xl:grid-rows-4 order-1">

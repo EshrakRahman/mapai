@@ -16,7 +16,7 @@ export default function HourlyForcast({coords}: { coords: Coords }) {
     return (
         <Card
             title="Hourly Forecast"
-            childrenClassName="flex gap-4 overflow-x-scroll gap-2 p-2"
+            childrenClassName="flex gap-4 2xl:justify-between overflow-x-scroll gap-2 p-2"
         >
             {data?.hourly.slice(0, 24).map((hour) => (
                 <div

@@ -1,53 +1,52 @@
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import type { Dispatch, SetStateAction } from "react";
+import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select";
+import type {Dispatch, SetStateAction} from "react";
 
 type LocationDropdownProps = {
-  location: string;
-  setLocation: Dispatch<SetStateAction<string>>;
+    location: string;
+    setLocation: Dispatch<SetStateAction<string>>;
 };
 export default function LocationDropdown({
-  location,
-  setLocation,
-}: LocationDropdownProps) {
-  return (
-    <Select value={location} onValueChange={(value) => setLocation(value)}>
-      <SelectTrigger className="w-45">
-        <SelectValue placeholder="Theme" />
-      </SelectTrigger>
-      <SelectContent className="z-1001">
-        <SelectGroup>
-          {location === "custom" && (
-            <SelectItem value="custom">Custom</SelectItem>
-          )}
-          {popularCities.map((city) => (
-            <SelectItem key={city} value={city}>
-              {city}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-  );
+                                             location,
+                                             setLocation,
+                                         }: LocationDropdownProps) {
+    return (
+        <Select
+            value={location}
+            onValueChange={(value) => setLocation(value)}
+        >
+            <SelectTrigger className="w-full xs:w-45">
+                <SelectValue placeholder="Theme" />
+            </SelectTrigger>
+            <SelectContent className="z-1001">
+                <SelectGroup>
+                    {location === "custom" && (
+                        <SelectItem value="custom">Custom</SelectItem>
+                    )}
+                    {popularCities.map((city) => (
+                        <SelectItem
+                            key={city}
+                            value={city}
+                        >
+                            {city}
+                        </SelectItem>
+                    ))}
+                </SelectGroup>
+            </SelectContent>
+        </Select>
+    );
 }
 
 const popularCities = [
-  "Tokyo",
-  "Paris",
-  "New York",
-  "London",
-  "Bangkok",
-  "Seoul",
-  "Dubai",
-  "Singapore",
-  "Barcelona",
-  "Rome",
-  "Istanbul",
-  "Sydney",
+    "Tokyo",
+    "Paris",
+    "New York",
+    "London",
+    "Bangkok",
+    "Seoul",
+    "Dubai",
+    "Singapore",
+    "Barcelona",
+    "Rome",
+    "Istanbul",
+    "Sydney",
 ];
