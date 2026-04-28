@@ -21,9 +21,14 @@ export default function SidePanel(props: Props) {
     const {isSidePanelOpen, setSidePanelOpen} = props;
 
     return (
-        <div className={clsx('fixed top-0 right-0 h-screen w-90 shadow-md  bg-sidebar z-1001 py-8 px-4 overflow-y-auto transition-transform duration-300', isSidePanelOpen ? 'translate-x-0 ' : 'translate-x-full')}>
+        <div
+            className={clsx(
+                "fixed top-0 right-0 h-screen w-(--sidebar-width) shadow-md bg-sidebar z-1001 py-8 px-4 overflow-y-scroll transition-transform duration-300 lg:translate-x-0!",
+                isSidePanelOpen ? "translate-x-0" : "translate-x-full"
+            )}
+        >
             <button onClick={() => setSidePanelOpen(false)}>
-                <Chevron className="size-8 invert " />
+                <Chevron className="size-8 invert lg:hidden " />
             </button>
             <Suspense fallback={<SidePanelSkeleton />}>
                 <AirPollution {...props} />
@@ -36,6 +41,7 @@ export default function SidePanel(props: Props) {
 function AirPollution({coords}: Props) {
     const {data} = useSuspenseQuery({
         queryKey: ['pollution', coords],
+        // @ts-expect-error -- coords in object with lat and lon
         queryFn: () => getAirPollution(coords)
     });
 

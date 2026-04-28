@@ -19,7 +19,7 @@ export default function AdditionalInfo({coords}: { coords: Coords }) {
     return (
         <Card
             title="Additional Info"
-            childrenClassName="flex flex-col"
+            childrenClassName="grid grid-cols-1 md:grid-cols-2 "
         >
             {rows.map(({label, value, Icon}) => (
                 <div
@@ -42,8 +42,9 @@ export default function AdditionalInfo({coords}: { coords: Coords }) {
     );
 }
 
-function FormatTime({value, number}: { value: string; number: number }) {
+function FormatTime({value, number}: { value: string; number: number | undefined }) {
     if (value === "sunset" || value === "sunrise") {
+        // @ts-expect-error - number but it says undefined
         return new Date(number * 1000).toLocaleTimeString("en-US", {
             hour: "2-digit",
             minute: "2-digit",
