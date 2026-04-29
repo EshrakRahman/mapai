@@ -17,6 +17,7 @@ import AdditionalSkeleton from "@/components/skeletons/AdditionalSkeleton.tsx";
 import SidePanel from "@/components/cards/SidePanel.tsx";
 import Hamburger from '/src/assets/hamburger-svgrepo-com.svg?react';
 import MobileHeader from "@/components/MobileHeader.tsx";
+import LightDarkMode from "@/components/LightDarkMode.tsx";
 
 export default function App() {
     const [coordinates, setCoordinates] = useState<Coords>({lat: 40, lon: 50});
@@ -58,13 +59,16 @@ export default function App() {
                             setMapType={setMapType}
                         />
                     </div>
+                    <div className="ml-auto flex gap-4 items-center ">
+                        <LightDarkMode />
 
-                    <button
-                        onClick={() => setSidePanelOpen(true)}
-                        className=" hidden xs:block "
-                    >
-                        <Hamburger className="size-6 invert ml-auto lg:hidden" />
-                    </button>
+                        <button
+                            onClick={() => setSidePanelOpen(true)}
+                            className=" hidden xs:block "
+                        >
+                            <Hamburger className="size-6 invert lg:hidden" />
+                        </button>
+                    </div>
 
 
                 </div>
